@@ -1,18 +1,16 @@
 {
-    "name": "cubicle-workshop",
-    "description": "SoftUni JS Back End Workshop Application",
-    "authors": "Borislav Stoyanov",
+    "name": "name",
+    "description": "description",
+    "authors": "author",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "pathToMain",
     "dependencies": {
+        "body-parser": "^1.19.0",
         "express": "^4.17.1",
-        "express-handlebars": "^3.1.0"
+        "express-handlebars": "^3.1.0",
+        "uniqid": "^5.0.3"
     },
     "devDependencies": {
-        "nodemon": "^1.19.2",
-        "uuid": "^8.3.2"
-    },
-    "scripts": {
-        "start":"nodemon"
+        "nodemon": "^1.19.2"
     }
 }
