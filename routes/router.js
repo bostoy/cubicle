@@ -8,21 +8,21 @@ router.route('/')
 
 router.route('/about')
     .get((req, res, next) => {
-        res.send('About Page')
+        res.render('about.hbs')
     })
 
 router.route('/create')
     .get((req, res, next) => {
-        res.send('Create Page')
+        res.render('create.hbs')
     })
 
 router.route('/details/:id')
     .get((req, res, next) => {
-        res.send('Details Page')
+        res.render('details.hbs')
     })
 
 router.route('*')
     .all((req, res) => {
-        res.send('Error Page')
+        res.render('404.hbs')
     })
 module.exports = router
