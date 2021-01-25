@@ -13,6 +13,10 @@ app.engine('.hbs', exphbs({
 }))
 app.set('view engine', '.hbs')
 
+//set static files folder
+app.use(express.static('static'))
+
+
 app.use(routes)
 
 app.listen(port, () => {
