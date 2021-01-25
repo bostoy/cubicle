@@ -1,10 +1,21 @@
 const express = require('express')
 const routes = require('./routes/router')
-
+const exphbs = require('express-handlebars')
 
 
 const app = express()
 const port = 3000
+
+//set view engine
+app.engine('.hbs', exphbs({
+    defaultLayout: 'main'
+    , extname: '.hbs'
+}))
+app.set('view engine', '.hbs')
+
+//set static files folder
+app.use(express.static('static'))
+
 
 app.use(routes)
 
