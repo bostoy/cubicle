@@ -8,16 +8,17 @@ const searchDB = function (name, difficultyFrom, difficultyTo) {
     const resultArr = []
     const db = readDB()
 
-    db.forEach(cube => {
-        if (cube.name.includes(name) && Number(cube.difficulty) >= Number(difficultyFrom) && Number(cube.difficulty) <= Number(difficultyTo)) {
-            resultArr.push(cube)
-        }
-    });
-
-    return resultArr
+    if (!name && !difficultyFrom && !difficultyTo) {
+        return db
+    } else {
+        db.forEach(cube => {
+            if (cube.name.toUpperCase().includes(name.toUpperCase()) && Number(cube.difficulty) >= Number(difficultyFrom) && Number(cube.difficulty) <= Number(difficultyTo)) {
+                resultArr.push(cube)
+            }
+        });
+        return resultArr
+    }
 }
-
-searchDB('Eco', '0', '9')
 
 module.exports = {
     readDB,

@@ -6,14 +6,17 @@ const exphbs = require('express-handlebars')
 const app = express()
 const port = 3000
 
-//set view engine
+app.use(express.urlencoded({
+    extended: true
+}))
+
 app.engine('.hbs', exphbs({
     defaultLayout: 'main'
     , extname: '.hbs'
 }))
 app.set('view engine', '.hbs')
 
-//set static files folder
+
 app.use(express.static('static'))
 
 
