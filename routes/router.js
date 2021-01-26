@@ -1,6 +1,7 @@
 const express = require('express')
 const dbController = require('../controllers/dbController')
 const router = express.Router()
+const Cube = require('../models/cube')
 
 
 router.route('/')
@@ -36,6 +37,12 @@ router.route('/create')
         res.render('create.hbs', {
             title: 'Create | Cubicle Workshop'
         })
+    })
+    .post((req, res) => {
+        const { name, description, imageUrl, difficultyLevel } = req.body
+        const cube = new Cube(name, description, imageUrl, difficultyLevel)
+        cube.save()
+        res.redirect('/')
     })
 
 router.route('/details/:id')
