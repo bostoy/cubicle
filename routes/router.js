@@ -1,10 +1,15 @@
 const express = require('express')
+const dbController = require('../controllers/dbController')
 const router = express.Router()
 
 router.route('/')
     .get((req, res, next) => {
+
+        const cubesArr = dbController.readDB()
+
         res.render('index.hbs', {
-            title: 'Home | Cubicle Workshop'
+            title: 'Home | Cubicle Workshop',
+            cubes: cubesArr
         })
     })
 
