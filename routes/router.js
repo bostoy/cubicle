@@ -1,10 +1,15 @@
 const express = require('express')
+const dbController = require('../controllers/dbController')
 const router = express.Router()
+
+const cubesArr = dbController.readDB()
 
 router.route('/')
     .get((req, res, next) => {
+
         res.render('index.hbs', {
-            title: 'Home | Cubicle Workshop'
+            title: 'Home | Cubicle Workshop',
+            cubes: cubesArr
         })
     })
 
@@ -24,8 +29,16 @@ router.route('/create')
 
 router.route('/details/:id')
     .get((req, res, next) => {
+
+        const id = req.params.id
+
+        const foundCube = cubesArr.find(cube => cube.id == id)
+
         res.render('details.hbs', {
-            title: "Details | Cubicle Workshop"
+            title: "Details | Cubicle Workshop",
+            imgURL: foundCube.imgURL,
+            description: foundCube.description,
+            difficulty: foundCube.difficulty
         })
     })
 

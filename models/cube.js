@@ -39,5 +39,5 @@ class Cube {
     }
 }
 
-const q1 = new Cube('Kubche', 'opisanie', 'url', '0')
+const q1 = new Cube('Eco-Dark', 'opisanie', 'https://thingsidesire.com/wp-content/uploads/2018/06/Eco-Dark-Rubik%E2%80%99s-Cube2.jpg', '6')
 q1.save()
