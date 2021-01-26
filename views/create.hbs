@@ -11,15 +11,15 @@
     <main>
       <h1>Create</h1>
       <div class="form">
-        <form action='' method="">
+        <form action='/create' method="POST">
           <label for="name">Name</label>
-          <input type="text" id="name" name="name">
+          <input required type="text" id="name" name="name">
           <label for="name">Description</label>
-          <textarea id="name" name="description"></textarea>
+          <textarea required id="name" name="description"></textarea>
           <label for="image">ImageUrl</label>
-          <input type="text" id="image" name="imageUrl">
+          <input required type="text" id="image" name="imageUrl">
           <label for="difficulty">Difficulty</label>
-          <select id="difficulty" name="difficultyLevel">
+          <select required id="difficulty" name="difficultyLevel">
             <option value="1">1 - Very Easy</option>
             <option value="2">2 - Easy</option>
             <option value="3">3 - Medium (Standard 3x3)</option>
