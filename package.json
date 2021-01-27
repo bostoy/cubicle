@@ -16,6 +16,7 @@
         "nodemon": "^1.19.4"
     },
     "scripts": {
-        "start": "nodemon"
+        "start": "SET NODE_ENV=development && nodemon ./index.js",
+        "prod": "SET NODE_ENV=production && node ./index.js"
     }
 }

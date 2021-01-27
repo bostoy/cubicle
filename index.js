@@ -1,10 +1,10 @@
 const express = require('express')
+const config = require('./config/config')
 const routes = require('./routes/router')
 const exphbs = require('express-handlebars')
 
 
 const app = express()
-const port = 3000
 
 app.use(express.urlencoded({
     extended: true
@@ -22,6 +22,6 @@ app.use(express.static('static'))
 
 app.use(routes)
 
-app.listen(port, () => {
-    console.log("Server listening on port: ", port)
+app.listen(config.PORT, () => {
+    console.log("Server listening on port: ", config.PORT)
 })
