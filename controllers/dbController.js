@@ -1,27 +1,12 @@
-const { json } = require('body-parser')
-const fs = require('fs')
+const mongoose = require('mongoose')
+mongoose.connect('mongodb+srv://dbUser:dbUserPassword@cubicle.elfpv.mongodb.net/allCubes?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
 
-const readDB = function () {
-    return JSON.parse(fs.readFileSync('./db/database.json'))
-}
-const searchDB = function (name, difficultyFrom, difficultyTo) {
-    const resultArr = []
-    const db = readDB()
+const db = mongoose.connection
 
-    if (!name && !difficultyFrom && !difficultyTo) {
-        return db
-    } else {
-        db.forEach(cube => {
-            if (cube.name.toUpperCase().includes(name.toUpperCase()) && Number(cube.difficulty) >= Number(difficultyFrom) && Number(cube.difficulty) <= Number(difficultyTo)) {
-                resultArr.push(cube)
-            }
-        });
-        return resultArr
-    }
-}
+db.on('error', (err) => {
+    console.error('Database conncetion error: ', err)
+})
 
-module.exports = {
-    readDB,
-    searchDB,
-
-}
+db.once('open', () => {
+    console.log('Connected to the database...')
+})
