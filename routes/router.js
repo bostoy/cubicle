@@ -7,21 +7,21 @@ const Cube = require('../models/cube')
 router.route('/')
     .get((req, res) => {
 
-        const cubesArr = dbController.readDB()
+        //todo read db
 
         res.render('index.hbs', {
             title: 'Home | Cubicle Workshop',
-            cubes: cubesArr
+            cubes: ''
         })
     })
     .post((req, res) => {
         const { search, from, to } = req.body
 
-        const cubesArr = dbController.searchDB(search, from, to)
+        //todo read db
 
         res.render('index.hbs', {
             title: 'Home | Cubicle Workshop',
-            cubes: cubesArr
+            cubes: '',
         })
     })
 
@@ -40,7 +40,14 @@ router.route('/create')
     })
     .post((req, res) => {
         const { name, description, imageUrl, difficultyLevel } = req.body
-        const cube = new Cube(name, description, imageUrl, difficultyLevel)
+
+        const cube = new Cube({
+            name,
+            difficulty: Number(difficultyLevel),
+            imageUrl,
+            description,
+        })
+
         cube.save()
         res.redirect('/')
     })
