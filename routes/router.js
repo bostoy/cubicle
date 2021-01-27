@@ -1,17 +1,18 @@
 const express = require('express')
-const dbController = require('../controllers/dbController')
 const router = express.Router()
-const Cube = require('../models/cube')
+const Schema = require('mongoose').Schema
+const Cube = require('../controllers/cube')
+const db = require('../controllers/database')
 
 
 router.route('/')
-    .get((req, res) => {
-
-        //todo read db
+    .get(async (req, res) => {
+        const filter = {}
+        const cubes = await Cube.find(filter).lean()
 
         res.render('index.hbs', {
             title: 'Home | Cubicle Workshop',
-            cubes: ''
+            cubes,
         })
     })
     .post((req, res) => {
