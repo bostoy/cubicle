@@ -26,7 +26,6 @@ router.route('/')
             }
         }
         const cubes = await Cube.find(conditions).lean()
-        console.log(cubes)
 
         res.render('index.hbs', {
             title: 'Home | Cubicle Workshop',
