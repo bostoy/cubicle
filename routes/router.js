@@ -45,7 +45,7 @@ router.route('/create')
         const cube = new Cube({
             name,
             difficulty: Number(difficultyLevel),
-            imageUrl,
+            imgURL: imageUrl,
             description,
         })
 
@@ -54,17 +54,16 @@ router.route('/create')
     })
 
 router.route('/details/:id')
-    .get((req, res) => {
+    .get(async (req, res) => {
 
         const id = req.params.id
-
-        const foundCube = cubesArr.find(cube => cube.id == id)
+        const cube = await Cube.findById(id)
 
         res.render('details.hbs', {
             title: "Details | Cubicle Workshop",
-            imgURL: foundCube.imgURL,
-            description: foundCube.description,
-            difficulty: foundCube.difficulty
+            imgURL: cube.imgURL,
+            description: cube.description,
+            difficulty: cube.difficulty
         })
     })
 

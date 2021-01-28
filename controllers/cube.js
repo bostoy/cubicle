@@ -11,7 +11,7 @@ const CubeSchema = new mongoose.Schema({
         max: 6,
         required: true
     },
-    imageUrl: {
+    imgURL: {
         type: String,
         required: true,
     },
