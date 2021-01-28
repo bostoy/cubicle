@@ -15,14 +15,22 @@ router.route('/')
             cubes,
         })
     })
-    .post((req, res) => {
+    .post(async (req, res) => {
         const { search, from, to } = req.body
 
-        //todo read db
+        const conditions = {
+            name: { "$regex": search, "$options": "i" },
+            difficulty: {
+                $gte: from,
+                $lte: to
+            }
+        }
+        const cubes = await Cube.find(conditions).lean()
+        console.log(cubes)
 
         res.render('index.hbs', {
             title: 'Home | Cubicle Workshop',
-            cubes: '',
+            cubes,
         })
     })
 
