@@ -11,10 +11,10 @@
     <main>
       <h1>Browser</h1>
       <form action="/" method="POST">
-        <input type="text" class="search" name="search" placeholder="Search...">
-        <input type="number" name="from" class="difficulty" placeholder="Difficulty from...">
+        <input type="text" required class="search" name="search" placeholder="Search...">
+        <input type="number" min='1' max="6" required name="from" class="difficulty" placeholder="Difficulty from...">
         <span>-</span>
-        <input type="number" name="to" class="difficulty" placeholder="Difficulty to...">
+        <input type="number" min='1' max="6" required name="to" class="difficulty" placeholder="Difficulty to...">
         <input type="submit" value="search">
       </form>
       {{#each cubes}}

@@ -1,27 +1,35 @@
 const express = require('express')
-const dbController = require('../controllers/dbController')
 const router = express.Router()
-const Cube = require('../models/cube')
+const Schema = require('mongoose').Schema
+const Cube = require('../controllers/cube')
+const db = require('../controllers/database')
 
 
 router.route('/')
-    .get((req, res) => {
-
-        const cubesArr = dbController.readDB()
+    .get(async (req, res) => {
+        const filter = {}
+        const cubes = await Cube.find(filter).lean()
 
         res.render('index.hbs', {
             title: 'Home | Cubicle Workshop',
-            cubes: cubesArr
+            cubes,
         })
     })
-    .post((req, res) => {
+    .post(async (req, res) => {
         const { search, from, to } = req.body
 
-        const cubesArr = dbController.searchDB(search, from, to)
+        const conditions = {
+            name: { "$regex": search, "$options": "i" },
+            difficulty: {
+                $gte: from,
+                $lte: to
+            }
+        }
+        const cubes = await Cube.find(conditions).lean()
 
         res.render('index.hbs', {
             title: 'Home | Cubicle Workshop',
-            cubes: cubesArr
+            cubes,
         })
     })
 
@@ -40,23 +48,29 @@ router.route('/create')
     })
     .post((req, res) => {
         const { name, description, imageUrl, difficultyLevel } = req.body
-        const cube = new Cube(name, description, imageUrl, difficultyLevel)
+
+        const cube = new Cube({
+            name,
+            difficulty: Number(difficultyLevel),
+            imgURL: imageUrl,
+            description,
+        })
+
         cube.save()
         res.redirect('/')
     })
 
 router.route('/details/:id')
-    .get((req, res) => {
+    .get(async (req, res) => {
 
         const id = req.params.id
-
-        const foundCube = cubesArr.find(cube => cube.id == id)
+        const cube = await Cube.findById(id)
 
         res.render('details.hbs', {
             title: "Details | Cubicle Workshop",
-            imgURL: foundCube.imgURL,
-            description: foundCube.description,
-            difficulty: foundCube.difficulty
+            imgURL: cube.imgURL,
+            description: cube.description,
+            difficulty: cube.difficulty
         })
     })
 
