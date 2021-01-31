@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const CubeSchema = new mongoose.Schema({
+const CubeScheme = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -14,14 +14,20 @@ const CubeSchema = new mongoose.Schema({
     imgURL: {
         type: String,
         required: true,
+        validate: /^https?/,
     },
     description: {
         type: String,
         required: true,
-    }
+        maxlength: 50
+    },
+    accessories: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Accessory'
+    }]
 })
 
-const Cube = mongoose.model('Cube', CubeSchema)
+const Cube = mongoose.model('Cube', CubeScheme)
 
 
 module.exports = Cube
