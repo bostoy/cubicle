@@ -67,10 +67,17 @@ router.route('/details/:id')
         const cube = await Cube.findById(id)
 
         res.render('details.hbs', {
-            title: "Details | Cubicle Workshop",
+            title: 'Details | Cubicle Workshop',
             imgURL: cube.imgURL,
             description: cube.description,
             difficulty: cube.difficulty
+        })
+    })
+
+router.route('/create/accessory/:id')
+    .get((req, res) => {
+        res.render('createAccessory.hbs', {
+            title: 'Create Accessory | Cubicle Workshop'
         })
     })
 
