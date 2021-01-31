@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const CubeSchema = new mongoose.Schema({
+const CubeScheme = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -21,7 +21,7 @@ const CubeSchema = new mongoose.Schema({
     }
 })
 
-const Cube = mongoose.model('Cube', CubeSchema)
+const Cube = mongoose.model('Cube', CubeScheme)
 
 
 module.exports = Cube
