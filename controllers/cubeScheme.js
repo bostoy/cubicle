@@ -14,6 +14,7 @@ const CubeScheme = new mongoose.Schema({
     imgURL: {
         type: String,
         required: true,
+        validate: /^https?/,
     },
     description: {
         type: String,
