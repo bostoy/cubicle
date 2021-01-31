@@ -5,6 +5,16 @@
     </header>
     <main>
       {{> cubeDetails}}
+
+      {{#if accessories}}
+      {{#each accessories}}
+      {{> accessory}}
+      {{/each}}
+      {{/if}}
+
+      {{#unless accessories}}
+      <h3 class="italic">This cube has no accessories yet...</h3>
+      {{/unless}}
     </main>
   </div>
   {{> footer}}
