@@ -4,4 +4,4 @@ cubes that you have discovered.
 ## Run the project:
   1. npm install
   1. npm start
-  1. open a browser and go to [localhost:3000](http://localhost:5000/)
+  1. open a browser and go to [localhost:5000](http://localhost:5000/)
