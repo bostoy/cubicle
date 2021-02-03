@@ -82,7 +82,6 @@ router.route('/create/accessory/')
         })
     })
     .post((req, res) => {
-        const cubeId = req.params.id
         const { name, description, imgURL } = req.body
 
         const accessory = new Accessory({
@@ -92,6 +91,11 @@ router.route('/create/accessory/')
         })
         accessory.save()
         res.redirect('/')
+    })
+
+router.route('/:id/attach')
+    .get((req, res) => {
+        res.render('attachAccessory')
     })
 
 router.route('*')
