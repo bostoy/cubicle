@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Schema = require('mongoose').Schema
-const Cube = require('../controllers/cubeScheme')
+const Cube = require('../models/cubeScheme')
 const db = require('../controllers/database')
 
 
