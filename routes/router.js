@@ -94,8 +94,18 @@ router.route('/create/accessory/')
     })
 
 router.route('/:id/attach')
-    .get((req, res) => {
-        res.render('attachAccessory')
+    .get(async (req, res) => {
+        const id = req.params.id
+        const cube = await Cube.findById(id)
+        const accessories = await Accessory.find({}).lean()
+
+        res.render('attachAccessory', {
+            imgURL: cube.imgURL,
+            accessories,
+        })
+    })
+    .post((req, res) => {
+
     })
 
 router.route('*')
