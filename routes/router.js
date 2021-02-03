@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const Schema = require('mongoose').Schema
-const Cube = require('../controllers/cubeScheme')
+const Cube = require('../models/cubeScheme')
+const Accessory = require('../models/accessoryScheme')
 const db = require('../controllers/database')
 
 
@@ -47,12 +48,12 @@ router.route('/create')
         })
     })
     .post((req, res) => {
-        const { name, description, imageUrl, difficultyLevel } = req.body
+        const { name, description, imgURL, difficultyLevel } = req.body
 
         const cube = new Cube({
             name,
             difficulty: Number(difficultyLevel),
-            imgURL: imageUrl,
+            imgURL,
             description,
         })
 
@@ -67,11 +68,44 @@ router.route('/details/:id')
         const cube = await Cube.findById(id)
 
         res.render('details.hbs', {
-            title: "Details | Cubicle Workshop",
+            title: 'Details | Cubicle Workshop',
             imgURL: cube.imgURL,
             description: cube.description,
             difficulty: cube.difficulty
         })
+    })
+
+router.route('/create/accessory/')
+    .get((req, res) => {
+        res.render('createAccessory.hbs', {
+            title: 'Create Accessory | Cubicle Workshop'
+        })
+    })
+    .post((req, res) => {
+        const { name, description, imgURL } = req.body
+
+        const accessory = new Accessory({
+            name,
+            description,
+            imgURL
+        })
+        accessory.save()
+        res.redirect('/')
+    })
+
+router.route('/:id/attach')
+    .get(async (req, res) => {
+        const id = req.params.id
+        const cube = await Cube.findById(id)
+        const accessories = await Accessory.find({}).lean()
+
+        res.render('attachAccessory', {
+            imgURL: cube.imgURL,
+            accessories,
+        })
+    })
+    .post((req, res) => {
+
     })
 
 router.route('*')
