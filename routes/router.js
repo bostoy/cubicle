@@ -65,13 +65,15 @@ router.route('/details/:id')
     .get(async (req, res) => {
 
         const id = req.params.id
-        const cube = await Cube.findById(id)
+        const cube = await Cube.findById(id).lean().populate('accessories').lean()
 
         res.render('details.hbs', {
             title: 'Details | Cubicle Workshop',
             imgURL: cube.imgURL,
             description: cube.description,
-            difficulty: cube.difficulty
+            difficulty: cube.difficulty,
+            accessories: cube.accessories
+
         })
     })
 
@@ -97,14 +99,20 @@ router.route('/:id/attach')
     .get(async (req, res) => {
         const id = req.params.id
         const cube = await Cube.findById(id)
-        const accessories = await Accessory.find({}).lean()
+        const accessories = await Accessory.find({ _id: { $nin: cube.accessories } }).lean() // const result = accessories.filter(e => !cube.accessories.includes(e._id))
 
         res.render('attachAccessory', {
             imgURL: cube.imgURL,
-            accessories,
+            accessories
         })
     })
-    .post((req, res) => {
+    .post(async (req, res) => {
+        const cube = await Cube.findById(req.params.id)
+        const accessoryId = req.body.accessory
+
+        cube.accessories.push(accessoryId)
+        cube.save()
+        res.redirect(`/details/${req.params.id}`)
 
     })
 
