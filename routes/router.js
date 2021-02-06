@@ -65,16 +65,15 @@ router.route('/details/:id')
     .get(async (req, res) => {
 
         const id = req.params.id
-        const cube = await Cube.findById(id)
-        const accessoriesIds = cube.accessories
-
-
+        const cube = await Cube.findById(id).lean().populate('accessories').lean()
 
         res.render('details.hbs', {
             title: 'Details | Cubicle Workshop',
             imgURL: cube.imgURL,
             description: cube.description,
-            difficulty: cube.difficulty
+            difficulty: cube.difficulty,
+            accessories: cube.accessories
+
         })
     })
 
