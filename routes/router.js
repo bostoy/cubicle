@@ -66,6 +66,9 @@ router.route('/details/:id')
 
         const id = req.params.id
         const cube = await Cube.findById(id)
+        const accessoriesIds = cube.accessories
+
+
 
         res.render('details.hbs', {
             title: 'Details | Cubicle Workshop',
@@ -104,7 +107,13 @@ router.route('/:id/attach')
             accessories,
         })
     })
-    .post((req, res) => {
+    .post(async (req, res) => {
+        const cube = await Cube.findById(req.params.id)
+        const accessoryId = req.body.accessory
+
+        cube.accessories.push(accessoryId)
+        cube.save()
+        res.redirect(`/details/${req.params.id}`)
 
     })
 
