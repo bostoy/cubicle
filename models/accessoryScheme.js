@@ -22,7 +22,7 @@ const AccessoryScheme = new mongoose.Schema({
     }
 })
 
-const Cube = mongoose.model('Accessory', AccessoryScheme)
+const Accessory = mongoose.model('Accessory', AccessoryScheme)
 
 
-module.exports = Cube
+module.exports = Accessory
