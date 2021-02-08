@@ -19,7 +19,6 @@ app.set('view engine', '.hbs')
 
 app.use(express.static('static'))
 
-
 app.use(routes)
 
 app.listen(config.PORT, () => {
