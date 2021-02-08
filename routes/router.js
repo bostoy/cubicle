@@ -7,9 +7,11 @@ const db = require('../config/database')
 
 const cubeController = require('../controllers/cubeController')
 const accessoryController = require('../controllers/accessoryController')
+const authController = require('../controllers/authController')
 
 router.use('/cube', cubeController)
 router.use('/accessory', accessoryController)
+router.use('/auth', authController)
 
 router.route('/')
     .get(async (req, res) => {
