@@ -9,6 +9,7 @@ const userScheme = new mongoose.Schema({
     },
     password: { //hashed passsword -> bcrypt
         type: String,
+        unique: true,
         required: true,
     },
     salt: {

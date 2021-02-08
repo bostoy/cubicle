@@ -1,10 +1,10 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const User = require('../models/userScheme')
-const saltRounds = require('../config/config').SALT_ROUNDS
+const config = require('../config/config')
 
 function createUser(username, password) {
-    bcrypt.genSalt(saltRounds, (err, salt) => {
+    bcrypt.genSalt(config.SALT_ROUNDS, (err, salt) => {
         if (err) {
             console.log('Error generating salt', err)
         }
@@ -14,7 +14,6 @@ function createUser(username, password) {
             }
             const user = new User({ username, password: hash, salt, })
             user.save()
-            console.log('User succesfully created')
         })
     })
 }
@@ -27,10 +26,9 @@ function validateRegisterPasswords(password, repeatPassword) {
 }
 async function availableUsername(username) {
     try {
-        const user = User.findOne({ username, })
+        let user = await User.findOne({ username, })
 
         if (user) {
-            console.log('Username is not available');
             return false
         }
     } catch (err) {

@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
 const User = require('../models/userScheme')
-const saltRounds = require('../config/config').SALT_ROUNDS
+const config = require('../config/config')
 
 const authService = require('../services/auth')
 
@@ -26,17 +26,23 @@ router.route('/register')
             title: 'Register | Cubicle Workshop'
         })
     })
-    .post((req, res, next) => {
-        const { username, password, repeatPassword } = req.body
-        username = username.toLowerCase()
+    .post(async (req, res, next) => {
+
+        let { username, password, repeatPassword } = req.body
 
         if (!authService.validateRegister(username, password, repeatPassword)) {
-            res.redirect('/auth/register')
+            errorMessage = true
+            res.render('register', {
+                title: 'Register | Cubicle Workshop',
+                error: true,
+                errorMessage: 'Error creating new user',
+
+            })
             return
         }
         authService.createUser(username, password)
 
-
+        res.redirect('/')
     })
 
 module.exports = router
