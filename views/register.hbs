@@ -4,7 +4,10 @@
     <main>
       <h1>Register Form</h1>
       <div class="form">
-        <form action='/' method="POST">
+        <form method="POST">
+          {{#if error}}
+          <span class="error">{{errorMessage}}</span>
+          {{/if}}
           <label for="username">Username</label>
           <input type="text" id="username" name="username">
 

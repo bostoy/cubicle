@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-mongoose.connect('mongodb+srv://dbUser:dbUserPassword@cubicle.elfpv.mongodb.net/allCubes?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+const config = require('./config')
+mongoose.connect(config.DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true })
 
 const db = mongoose.connection
 
