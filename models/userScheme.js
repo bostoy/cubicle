@@ -7,9 +7,8 @@ const userScheme = new mongoose.Schema({
         type: String,
         required: true,
     },
-    password: { //hashed passsword -> bcrypt
+    password: {
         type: String,
-        unique: true,
         required: true,
     },
 

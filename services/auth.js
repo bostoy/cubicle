@@ -21,12 +21,12 @@ function register(username, password) {
     })
 }
 
-async function login(username, password) {
+async function login({ username, password }) {
     const user = await User.findOne({ username })
-    if (!user) throw { errorMessage: 'Invalid username or password!' }
+    if (!user) throw { message: 'Invalid username or password!' }
 
     let isMatch = bcrypt.compare(password, user.password)
-    if (!isMatch) throw { errorMessage: 'Invalid username or password!' }
+    if (!isMatch) throw { message: 'Invalid username or password!' }
 
     let token = jwt.sign({ _id: user._id, roles: ['admin'] }, config.SECRET)
 

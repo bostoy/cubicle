@@ -15,16 +15,15 @@ router.route('/login')
             title: 'Login | Cubicle Workshop'
         })
     })
-    .post((req, res, next) => {
+    .post(async (req, res, next) => {
         let { username, password } = req.body
 
         try {
-            const token = authService.login({ username, password })
-
+            const token = await authService.login({ username, password })
             res.cookie(config.COOKIE_NAME, token)
             res.redirect('/')
         } catch (error) {
-            console.log('Error logging in: ', error)
+
             res.render('login', {
                 title: 'Login | Cubicle',
                 error,
