@@ -29,20 +29,24 @@ router.route('/register')
     .post(async (req, res, next) => {
 
         let { username, password, repeatPassword } = req.body
-
-        if (!authService.validateRegister(username, password, repeatPassword)) {
-            errorMessage = true
-            res.render('register', {
-                title: 'Register | Cubicle Workshop',
-                error: true,
-                errorMessage: 'Error creating new user',
-
-            })
-            return
+        const foundUser = await User.findOne({ username, }).lean()
+        if (foundUser) {
+            return res.render('register', { error: 'Username already in use' })
         }
-        authService.createUser(username, password)
 
-        res.redirect('/')
+
+        if (password !== repeatPassword) {
+            return res.render('register', { error: 'Password missmatch!' })
+        }
+
+        try {
+            authService.register(username, password)
+            res.redirect('/auth/login')
+        } catch (error) {
+            res.render('register', { title: 'Register | Cubicle', error })
+        }
+
+
     })
 
 module.exports = router

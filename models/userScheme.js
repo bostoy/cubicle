@@ -12,9 +12,7 @@ const userScheme = new mongoose.Schema({
         unique: true,
         required: true,
     },
-    salt: {
-        type: String,
-    }
+
 })
 const User = mongoose.model('User', userScheme)
 

@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt')
 const User = require('../models/userScheme')
 const config = require('../config/config')
 
-function createUser(username, password) {
+function register(username, password) {
     bcrypt.genSalt(config.SALT_ROUNDS, (err, salt) => {
         if (err) {
             console.log('Error generating salt', err)
@@ -17,29 +17,7 @@ function createUser(username, password) {
         })
     })
 }
-function validateRegister(username, password, repeatPassword) {
-    return validateRegisterPasswords(password, repeatPassword) && availableUsername(username)
-}
-function validateRegisterPasswords(password, repeatPassword) {
-
-    return password === repeatPassword
-}
-async function availableUsername(username) {
-    try {
-        let user = await User.findOne({ username, })
-
-        if (user) {
-            return false
-        }
-    } catch (err) {
-        console.log('Error finding username in db', err)
-        return
-    }
-    console.log('Username is available')
-    return true
-}
 
 module.exports = {
-    validateRegister,
-    createUser,
+    register,
 }
