@@ -21,6 +21,7 @@ router.route('/')
         res.render('index.hbs', {
             title: 'Home | Cubicle Workshop',
             cubes,
+            isAuthenticated: req.cookies['USER_SESSION']
         })
     })
     .post(async (req, res) => {
@@ -44,7 +45,9 @@ router.route('/')
 router.route('/about')
     .get((req, res) => {
         res.render('about.hbs', {
-            title: 'About | Cubicle Workshop'
+            title: 'About | Cubicle Workshop',
+            isAuthenticated: req.cookies['USER_SESSION']
+
         })
     })
 

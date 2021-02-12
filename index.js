@@ -2,9 +2,11 @@ const express = require('express')
 const config = require('./config/config')
 const routes = require('./routes/router')
 const exphbs = require('express-handlebars')
+const cookieParser = require('cookie-parser')
 
 
 const app = express()
+
 
 app.use(express.urlencoded({
     extended: true
@@ -15,9 +17,8 @@ app.engine('.hbs', exphbs({
     , extname: '.hbs'
 }))
 app.set('view engine', '.hbs')
-
-
 app.use(express.static('static'))
+app.use(cookieParser())
 
 app.use(routes)
 

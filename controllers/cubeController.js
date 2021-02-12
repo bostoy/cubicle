@@ -2,15 +2,18 @@ const { Router } = require('express')
 const router = Router()
 const Cube = require('../models/cubeScheme')
 const Accessory = require('../models/accessoryScheme')
+const isAuthenticated = require('../middleware/isAuthenticated')
 
 
 router.route('/create')
-    .get((req, res) => {
+    .get(isAuthenticated, (req, res) => {
         res.render('create.hbs', {
-            title: 'Create | Cubicle Workshop'
+            title: 'Create | Cubicle Workshop',
+            isAuthenticated: req.cookies['USER_SESSION']
+
         })
     })
-    .post((req, res) => {
+    .post(isAuthenticated, (req, res) => {
         const { name, description, imgURL, difficultyLevel } = req.body
 
         const cube = new Cube({
@@ -18,6 +21,7 @@ router.route('/create')
             difficulty: Number(difficultyLevel),
             imgURL,
             description,
+
         })
 
         cube.save()
@@ -41,17 +45,19 @@ router.route('/details/:id')
     })
 
 router.route('/attach/:id')
-    .get(async (req, res) => {
+    .get(isAuthenticated, async (req, res) => {
         const id = req.params.id
         const cube = await Cube.findById(id)
         const accessories = await Accessory.find({ _id: { $nin: cube.accessories } }).lean() // const result = accessories.filter(e => !cube.accessories.includes(e._id))
 
         res.render('attachAccessory', {
             imgURL: cube.imgURL,
-            accessories
+            accessories,
+            isAuthenticated: req.cookies['USER_SESSION']
+
         })
     })
-    .post(async (req, res) => {
+    .post(isAuthenticated, async (req, res) => {
         const cube = await Cube.findById(req.params.id)
         const accessoryId = req.body.accessory
 

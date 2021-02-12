@@ -1,44 +1,46 @@
 const { Router } = require('express')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const cookieParser = require('cookie-parser')
 const User = require('../models/userScheme')
 const config = require('../config/config')
 
 const authService = require('../services/auth')
-
+const isAuthenticated = require('../middleware/isAuthenticated')
+const isLoggedIn = require('../middleware/isLoggedIn')
+const { COOKIE_NAME } = config
 const router = Router()
 
 router.route('/login')
-    .get((req, res, next) => {
+    .get(isLoggedIn, (req, res, next) => {
         res.render('login', {
             title: 'Login | Cubicle Workshop'
         })
     })
-    .post(async (req, res, next) => {
+    .post(isLoggedIn, async (req, res, next) => {
         let { username, password } = req.body
 
         try {
             const token = await authService.login({ username, password })
-            res.cookie(config.COOKIE_NAME, token)
+            res.cookie(COOKIE_NAME, token)
             res.redirect('/')
         } catch (error) {
 
             res.render('login', {
                 title: 'Login | Cubicle',
                 error,
+
             })
         }
     })
 
 
 router.route('/register')
-    .get((req, res, next) => {
+    .get(isLoggedIn, (req, res, next) => {
         res.render('register', {
-            title: 'Register | Cubicle Workshop'
+            title: 'Register | Cubicle Workshop',
         })
     })
-    .post(async (req, res, next) => {
+    .post(isLoggedIn, async (req, res, next) => {
 
         let { username, password, repeatPassword } = req.body
         const foundUser = await User.findOne({ username, }).lean()
@@ -60,5 +62,11 @@ router.route('/register')
 
 
     })
+
+router.get('/logout', isAuthenticated, (req, res) => {
+    console.log(req.cookies)
+    res.clearCookie(COOKIE_NAME)
+    res.redirect('/')
+})
 
 module.exports = router
