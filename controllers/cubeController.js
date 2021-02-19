@@ -68,7 +68,7 @@ router.route('/edit/:id')
         const { name, description, imgURL, difficulty } = await Cube.findById(id).lean()
 
         res.render('editCube', {
-            tile: 'Edit Cube | Cubicle',
+            title: 'Edit Cube | Cubicle',
             name,
             description,
             imgURL,
@@ -77,7 +77,16 @@ router.route('/edit/:id')
         })
     })
     .post(isAuthenticated, (req, res) => {
+        const id = req.params.id
+        const { name, description, imageUrl, difficultyLevel } = req.body
 
+        Cube.findByIdAndUpdate(id, { name, description, imgURL: imageUrl, difficulty: difficultyLevel }, (err) => {
+            if (err) {
+                return console.log('Error updating cube: ', err)
+            }
+            console.log('Cube updated')
+            res.redirect('/')
+        })
     })
 
 router.route('/details/:id')
