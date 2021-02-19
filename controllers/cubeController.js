@@ -1,8 +1,10 @@
 const { Router } = require('express')
+const jwt = require('jsonwebtoken')
 const router = Router()
 const Cube = require('../models/cubeScheme')
 const Accessory = require('../models/accessoryScheme')
 const isAuthenticated = require('../middleware/isAuthenticated')
+const { SECRET } = require('../config/config')
 
 
 router.route('/create')
@@ -15,17 +17,28 @@ router.route('/create')
     })
     .post(isAuthenticated, (req, res) => {
         const { name, description, imgURL, difficultyLevel } = req.body
+        const userToken = req.cookies['USER_SESSION']
+        console.log(userToken)
 
-        const cube = new Cube({
-            name,
-            difficulty: Number(difficultyLevel),
-            imgURL,
-            description,
+        try {
+            const decoded = jwt.verify(userToken, SECRET)
+            const cube = new Cube({
+                name,
+                difficulty: Number(difficultyLevel),
+                imgURL,
+                description,
+                creator: decoded._id
+            })
 
-        })
+            cube.save()
+            res.redirect('/')
 
-        cube.save()
-        res.redirect('/')
+        } catch (err) {
+            console.log('JWT Decoding error', err)
+        }
+
+
+
     })
 
 router.route('/details/:id')
