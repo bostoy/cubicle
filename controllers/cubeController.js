@@ -37,6 +37,7 @@ router.route('/create')
             console.log('JWT Decoding error', err)
         }
     })
+
 router.route('/delete/:id')
     .get(isAuthenticated, async (req, res) => {
         const id = req.params.id
@@ -59,6 +60,24 @@ router.route('/delete/:id')
             console.log('Cube deleted')
             res.redirect('/')
         })
+    })
+
+router.route('/edit/:id')
+    .get(isAuthenticated, async (req, res) => {
+        const id = req.params.id
+        const { name, description, imgURL, difficulty } = await Cube.findById(id).lean()
+
+        res.render('editCube', {
+            tile: 'Edit Cube | Cubicle',
+            name,
+            description,
+            imgURL,
+            difficulty,
+            id,
+        })
+    })
+    .post(isAuthenticated, (req, res) => {
+
     })
 
 router.route('/details/:id')
