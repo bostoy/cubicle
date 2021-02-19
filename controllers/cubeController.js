@@ -5,6 +5,7 @@ const Cube = require('../models/cubeScheme')
 const Accessory = require('../models/accessoryScheme')
 const isAuthenticated = require('../middleware/isAuthenticated')
 const { SECRET } = require('../config/config')
+const { isValidObjectId } = require('mongoose')
 
 
 router.route('/create')
@@ -18,7 +19,6 @@ router.route('/create')
     .post(isAuthenticated, (req, res) => {
         const { name, description, imgURL, difficultyLevel } = req.body
         const userToken = req.cookies['USER_SESSION']
-        console.log(userToken)
 
         try {
             const decoded = jwt.verify(userToken, SECRET)
@@ -36,24 +36,42 @@ router.route('/create')
         } catch (err) {
             console.log('JWT Decoding error', err)
         }
+    })
+router.route('/delete/:id')
+    .get(isAuthenticated, async (req, res) => {
+        const id = req.params.id
+        const { name, description, imgURL, difficulty } = await Cube.findById(id).lean()
 
-
-
+        res.render('deleteCube', {
+            title: 'Delete Cube | Cubicle',
+            name: name,
+            description: description,
+            imgURL: imgURL,
+            difficulty: difficulty,
+            id,
+        })
+    })
+    .post(isAuthenticated, (req, res) => {
+        Cube.deleteOne({ _id: req.params.id }, (err) => {
+            if (err) {
+                return console.log('Error deleting cube: ', err)
+            }
+            console.log('Cube deleted')
+            res.redirect('/')
+        })
     })
 
 router.route('/details/:id')
     .get(async (req, res) => {
-
         const id = req.params.id
         const cube = await Cube.findById(id).lean().populate('accessories').lean()
-
         res.render('details.hbs', {
             title: 'Details | Cubicle Workshop',
             imgURL: cube.imgURL,
             description: cube.description,
             difficulty: cube.difficulty,
-            accessories: cube.accessories
-
+            accessories: cube.accessories,
+            id,
         })
     })
 
