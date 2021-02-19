@@ -54,7 +54,9 @@ router.route('/about')
 router.route('*')
     .all((req, res) => {
         res.render('404.hbs', {
-            title: 'Error | Cubicle Workshop'
+            title: 'Error | Cubicle Workshop',
+            isAuthenticated: req.cookies['USER_SESSION']
+
         })
     })
 module.exports = router
