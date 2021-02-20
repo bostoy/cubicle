@@ -20,8 +20,9 @@ router.route('/login')
         let { username, password } = req.body
 
         try {
-            const token = await authService.login({ username, password })
-            res.cookie(COOKIE_NAME, token)
+            const authResult = await authService.login({ username, password })
+            res.cookie(COOKIE_NAME, authResult.token)
+            res.cookie("user_id", authResult.uid)
             res.redirect('/')
         } catch (error) {
 
@@ -64,7 +65,6 @@ router.route('/register')
     })
 
 router.get('/logout', isAuthenticated, (req, res) => {
-    console.log(req.cookies)
     res.clearCookie(COOKIE_NAME)
     res.redirect('/')
 })

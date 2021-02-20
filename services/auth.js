@@ -30,8 +30,7 @@ async function login({ username, password }) {
 
     let token = jwt.sign({ _id: user._id, roles: ['admin'] }, config.SECRET)
 
-    return token
-
+    return { token: token, uid: user._id }
 
 }
 

@@ -95,7 +95,7 @@ router.route('/details/:id')
         const userToken = req.cookies['USER_SESSION']
         let checkCreator = false
         const cube = await Cube.findById(id).populate('accessories').lean()
-        const { _id } = jwt.verify(userToken, SECRET)
+        const _id = req.cookies["user_id"]
 
         if (cube.creator == _id) {
             checkCreator = true
