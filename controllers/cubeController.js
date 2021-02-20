@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken')
 const router = Router()
 const Cube = require('../models/cubeScheme')
 const Accessory = require('../models/accessoryScheme')
-const isAuthenticated = require('../middleware/isAuthenticated')
 const { SECRET } = require('../config/config')
-const { isValidObjectId } = require('mongoose')
+const isAuthenticated = require('../middleware/isAuthenticated')
+const isCreator = require('../middleware/isCreator')
 
 
 router.route('/create')
@@ -39,7 +39,7 @@ router.route('/create')
     })
 
 router.route('/delete/:id')
-    .get(isAuthenticated, async (req, res) => {
+    .get(isAuthenticated, isCreator, async (req, res) => {
         const id = req.params.id
         const { name, description, imgURL, difficulty } = await Cube.findById(id).lean()
 
@@ -52,7 +52,7 @@ router.route('/delete/:id')
             id,
         })
     })
-    .post(isAuthenticated, (req, res) => {
+    .post(isAuthenticated, isCreator, (req, res) => {
         Cube.deleteOne({ _id: req.params.id }, (err) => {
             if (err) {
                 return console.log('Error deleting cube: ', err)
@@ -63,7 +63,7 @@ router.route('/delete/:id')
     })
 
 router.route('/edit/:id')
-    .get(isAuthenticated, async (req, res) => {
+    .get(isAuthenticated, isCreator, async (req, res) => {
         const id = req.params.id
         const { name, description, imgURL, difficulty } = await Cube.findById(id).lean()
 
@@ -76,7 +76,7 @@ router.route('/edit/:id')
             id,
         })
     })
-    .post(isAuthenticated, (req, res) => {
+    .post(isAuthenticated, isCreator, (req, res) => {
         const id = req.params.id
         const { name, description, imageUrl, difficultyLevel } = req.body
 
@@ -90,9 +90,18 @@ router.route('/edit/:id')
     })
 
 router.route('/details/:id')
-    .get(async (req, res) => {
+    .get(isAuthenticated, async (req, res) => {
         const id = req.params.id
-        const cube = await Cube.findById(id).lean().populate('accessories').lean()
+        const userToken = req.cookies['USER_SESSION']
+        let checkCreator = false
+        const cube = await Cube.findById(id).populate('accessories').lean()
+        const { _id } = jwt.verify(userToken, SECRET)
+
+        if (cube.creator == _id) {
+            checkCreator = true
+        }
+
+
         res.render('details.hbs', {
             title: 'Details | Cubicle Workshop',
             imgURL: cube.imgURL,
@@ -100,12 +109,15 @@ router.route('/details/:id')
             difficulty: cube.difficulty,
             accessories: cube.accessories,
             id,
+            isAuthenticated: req.cookies['USER_SESSION'],
+            creator: checkCreator,
         })
     })
 
 router.route('/attach/:id')
-    .get(isAuthenticated, async (req, res) => {
+    .get(isAuthenticated, isCreator, async (req, res) => {
         const id = req.params.id
+
         const cube = await Cube.findById(id)
         const accessories = await Accessory.find({ _id: { $nin: cube.accessories } }).lean() // const result = accessories.filter(e => !cube.accessories.includes(e._id))
 

@@ -6,12 +6,12 @@
     <main>
       {{> cubeDetails}}
 
+      <h2>Accessories</h2>
       {{#if accessories}}
       {{#each accessories}}
       {{> accessory}}
       {{/each}}
       {{/if}}
-      <h2>Accessories</h2>
       {{#unless accessories}}
       <h3 class="italic">This cube has no accessories yet...</h3>
       {{/unless}}
